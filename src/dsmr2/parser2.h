@@ -380,9 +380,6 @@ struct P1Parser {
       if (check_res.err)
         return check_res;
 
-//       USBSerial.print("CALC CRC: ");      USBSerial.printf("%04X\n",crc);
-//       USBSerial.print("check_res.result CRC: "); USBSerial.printf("%04X\n",check_res.result);
-
       // Check CRC
       if (check_res.result != crc)
         return res.fail(F("Checksum mismatch"), data_end + 1);

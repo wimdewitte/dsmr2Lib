@@ -16,8 +16,10 @@ namespace dsmr
         P1Reader(Stream *stream, uint8_t req_pin, bool checksum = true)
             : stream(stream), req_pin(req_pin), once(false), state(State::DISABLED_STATE), buffer_idx(0), _available(false)
         {
-            pinMode(req_pin, OUTPUT);
-            digitalWrite(req_pin, LOW);
+            if (req_pin > -1) {
+                pinMode(req_pin, OUTPUT);
+                digitalWrite(req_pin, LOW);
+            }
             this->checksum = checksum;
             buffer[0] = '\0'; // Initialize empty string
         }
@@ -29,14 +31,16 @@ namespace dsmr
 
         void enable(bool once)
         {
-            digitalWrite(this->req_pin, HIGH);
+            if (req_pin > -1)
+                digitalWrite(this->req_pin, HIGH);
             this->state = State::WAITING_STATE;
             this->once = once;
         }
 
         void disable()
         {
-            digitalWrite(this->req_pin, LOW);
+            if (req_pin > -1)
+                digitalWrite(this->req_pin, LOW);
             this->state = State::DISABLED_STATE;
             if (!this->_available)
             {
